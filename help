@@ -1,0 +1,32 @@
+
+Sure. I can do that on Tuesday, but it would be better if students raised questions as well (here or during class).
+
+Minimally, the project is as follows :
+
+1. Read a string, tokenize it and lemmatize it (there's a colab for that on UBLearns)
+
+2. Parse list of lemmas using a grammar with lambda terms (there's a colab for that on UBLearns)
+
+3. Extract the output semantic representation (there's a colab for that on UBLearns)
+
+4. Produce an output:
+
+    4.1 If the sentence is a not a question, then run the semantic representation through the model checker. The model checker's answer is the system's answer (agree/disagree).
+
+    4.2 If the sentence is a yes/no question, run the semantic representation through the model checker. The model checker's answer is the system's answer (true/false).
+
+    4.3 If the sentence is a content question (who/what), then run the semantic representation through the model checker relative to the free variable in the formula, and create answer using the model and the values that the model
+
+    checker found for the free variable.
+
+5. Return to 1 unless the user terminates the loop.
+
+You have all the code you need to construct such a system. Look at the grammars and the model checker code.
+
+Points 4.2 and 4.3 are part of Tuesday's lecture, but those slides and respective COLAB are already online. All else you can solve right now.
+
+There is a range of sentence patterns your system needs to be able to parse, as detailed in the project description, as well as a range of answers that your systems needs to be able to give to various kinds of input, as exemplified in the project description. . Nothing special needs to be added to the code you have been provided. You just need to understand what has been provided in order to be able to use it.
+
+The Q&A domain is your choice, but you are responsible for augmenting the grammar and the model accordingly (ie with the right lexical items.
+
+Like I said in class, the best type of team for this project is one where a linguist pairs up with a computer scientist, but of course that is not a requirement by any means. You can solve this by yourself, if you chose to, or pair up with a student from the same cohort.

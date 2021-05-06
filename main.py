@@ -15,84 +15,72 @@ from functools import *
 # model = '/content/stanford-postagger-full-2020-11-17/models/english-left3words-distsim.tagger'
 
 
-# stanford_tagger = StanfordPOSTagger(model, jar, encoding='utf8')
-
-
-from nltk.tag.stanford import CoreNLPPOSTagger, CoreNLPNERTagger
-from nltk.parse.corenlp import CoreNLPParser
-stpos, stner = CoreNLPPOSTagger(), CoreNLPNERTagger()
-# stpos.tag('What is the airspeed of an unladen swallow ?'.split())
-
-who_query = []
-yes_no_query = []
-declaration_query = []
-
-#def determine_type(sentence):
-# return 
-
-# def declare(declaration):
-#   return  
-# def yes_no_question(question):
-#   return
-# def who(question):
-#   return
 
 def tokenize(words):
   raw_tokens =  list(filter(lambda x: re.match(r"[A-Za-z]",x),nltk.word_tokenize(words)))
   
   tagged = nltk.pos_tag(raw_tokens) 
-
   type_map = {'J':wordnet.ADJ,'V':wordnet.VERB,'N':wordnet.NOUN,'R':wordnet.ADV,'D':wordnet.NOUN}
   lemma =  nltk.stem.WordNetLemmatizer()
   return [
       (lemma.lemmatize(token,type_map[type_value[0]]),type_value) if type_value[0] in type_map
-      else lemma.lemmatize(token) 
+      else (lemma.lemmatize(token),type_value)
       for token,type_value in tagged
     ]
 
-def create_dict(words):
-  type_dict= { wordnet:[] for word, word_type in words }
-  for word,word_type in words:
-      type_dict[word_type].append(word) 
-  return type_dict
 
-def parse(words):
+def semantics_interface(tokens):
+# take tokens and build a  Semantics interface
+    return ""
+
+
+def create_model(v):
+    value = nltk.Valuation.fromstring(v)    
+    init = nltk.Assignment(value.domain)
+    m = nltk.Model(value.domain,value)
+    return (m,init) 
+
+def verb_checking(verb,noun1,noun2,m,init):
+   check_string= f"{verb}({noun1},{noun2})" 
+   return m.evaluate(check_string,init) 
+
+print(tokenize("what is there?"))
+#determine_type("A man entered the dealership.")
+
+# part 4
+def CFG():
   grammer_str = """
-      # % start S
-      ############################
-      # Grammar rules
-      ############################
-        S -> NP VP
-        PP -> P NP
-        NP -> DT N
-        N -> N PP
-        N -> Adj N
-        VP -> IV
-        VP -> TV NP
-        VP -> DTV NP NP
-        VP -> DTV NP PP
-        VP -> VP PP
-        VP -> SV S
-        VP -> AUX VP
-        VP -> ADV VP  
-        NP -> PN
-        NP -> PRN
-      ############################ 
-"""
-  wordtype_dict = create_dict(words)
-  
-  pls= lambda ls: reduce(lambda type_value,string: string+" "+type_value+"\n" ,ls,"")  
+    # % start S
+    ############################
+    # Grammar rules
+    ############################
+      S -> NP VP
+      PP -> P NP
+      NP -> DT N
+      N -> N PP
+      N -> Adj N
+      VP -> IV
+      VP -> TV NP
+      VP -> DTV NP NP
+      VP -> DTV NP PP
+      VP -> VP PP
+      VP -> SV S
+      VP -> AUX VP
+      VP -> ADV VP  
+      NP -> PN
+      NP -> PRN
+    ############################ 
+      DT -> A 
+      Adj -> tall skinny big strong powerful short huge funny smart nice mean
+      P -> about in as to ad into for near above as like since 
+      C -> that 
+      WP -> who what 
+      ITV -> act adapt crawl danse erupt escape leave start party panic
+      TV -> grab impower hold push build mold hug love juice obliterate 
+      N -> man boy cat dog time house company cow program company study owner door check corner job dealership office customer sailor member employee
+      PN -> Jimmy James Jordan Grant Holtzman Bob Joe Jim Jeff George 
 
-  pk = lambda str_value:str_value+" ->"
+      VPB ->sneeze
+  """
+my_grammar = nltk.CFG.fromstring(string)
 
-  rules= [  pk(k) + pls(ls)  for k,ls in wordtype_dict.items()]
-  
-  
-
-  my_grammar = nltk.CFG.fromstring(string)
- 
-  
-
-
-tokenize("A man entered the dealership.")
-determine_type("A man entered the dealership."
