@@ -61,23 +61,22 @@ def semantics_interface(tokens):
       TV -> grab impower hold push build mold hug love juice obliterate 
       N -> man boy cat dog time house company cow program company study owner door check corner job dealership office customer sailor member employee
       PN -> Jimmy James Jordan Grant Holtzman Bob Joe Jim Jeff George 
-
       VPB ->sneeze
   """        
-  return ""
+    return grammer_str
     
     
-    def create_model(v):
-        value = nltk.Valuation.fromstring(v)    
-        init = nltk.Assignment(value.domain)
-        m = nltk.Model(value.domain,value)
-        return (m,init) 
+def create_model(v):
+      value = nltk.Valuation.fromstring(v)    
+      init = nltk.Assignment(value.domain)
+      m = nltk.Model(value.domain,value)
+      return (m,init) 
     
-    def verb_checking(verb,noun1,noun2,m,init):
-       check_string= f"{verb}({noun1},{noun2})" 
-       return m.evaluate(check_string,init) 
+def verb_checking(verb,noun1,noun2,m,init):
+  check_string= f"{verb}({noun1},{noun2})" 
+  return m.evaluate(check_string,init) 
     
-    print(tokenize("what is there?"))
+print(tokenize("what is there?"))
     #determine_type("A man entered the dealership.")
   """  
     # part 4
