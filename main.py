@@ -31,25 +31,7 @@ def tokenize(words):
 
 def semantics_interface(tokens):
 # take tokens and build a  Semantics interface
-    return ""
-
-
-def create_model(v):
-    value = nltk.Valuation.fromstring(v)    
-    init = nltk.Assignment(value.domain)
-    m = nltk.Model(value.domain,value)
-    return (m,init) 
-
-def verb_checking(verb,noun1,noun2,m,init):
-   check_string= f"{verb}({noun1},{noun2})" 
-   return m.evaluate(check_string,init) 
-
-print(tokenize("what is there?"))
-#determine_type("A man entered the dealership.")
-
-# part 4
-def CFG():
-  grammer_str = """
+    grammer_str = """
     # % start S
     ############################
     # Grammar rules
@@ -81,6 +63,25 @@ def CFG():
       PN -> Jimmy James Jordan Grant Holtzman Bob Joe Jim Jeff George 
 
       VPB ->sneeze
-  """
+  """        
+  return ""
+    
+    
+    def create_model(v):
+        value = nltk.Valuation.fromstring(v)    
+        init = nltk.Assignment(value.domain)
+        m = nltk.Model(value.domain,value)
+        return (m,init) 
+    
+    def verb_checking(verb,noun1,noun2,m,init):
+       check_string= f"{verb}({noun1},{noun2})" 
+       return m.evaluate(check_string,init) 
+    
+    print(tokenize("what is there?"))
+    #determine_type("A man entered the dealership.")
+  """  
+    # part 4
+def CFG():
+  
 my_grammar = nltk.CFG.fromstring(string)
 
