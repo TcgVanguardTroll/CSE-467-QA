@@ -36,21 +36,21 @@ def semantics_interface(tokens):
     ############################
     # Grammar rules
     ############################
-      S -> NP VP
-      PP -> P NP
-      NP -> DT N
-      N -> N PP
-      N -> Adj N
-      VP -> IV
-      VP -> TV NP
-      VP -> DTV NP NP
-      VP -> DTV NP PP
-      VP -> VP PP
-      VP -> SV S
-      VP -> AUX VP
-      VP -> ADV VP  
-      NP -> PN
-      NP -> PRN
+      S[SEM  = <?sub(?vp)>]  -> NP[SEM=?subj] VP[SEM=?vp]
+      PP[SEM = <?prep(?np)>] -> P[SEM=?prep] NP[SEM=?np]
+      NP[SEM = <?det(?nom)>] -> DT[SEM=?det] N[SEM=?nom]
+      N[SEM  = <?nom(?pp)>]  -> N[SEM=?nom] PP[SEM=?pp]
+      N[SEM = <?adj(?nom)>]  -> Adj[SEM=?adj] N[SEM=?nom]
+      VP[SEM = <?iv>] -> IV[SEM=?iv]
+      VP[SEM = <?v(?obj)>] -> TV[SEM=?v] NP[SEM=?obj]
+      VP[SEM = <?v(?obj(?obj))>] -> DTV[SEM=?v] NP[SEM=?obj] NP[SEM=?obj]
+      VP[SEM = <?v(?obj(?prep))>] -> DTV[SEM=?obj] NP[SEM=?obj] PP[SEM=?prep]
+      VP[SEM = <?vp(?pp)>] -> VP[SEM=?vp] PP[SEM=?vp]
+      VP[SEM = <?v(?vp)>] -> SV[SEM=?v] S[SEM=?vp]
+      VP[SEM = <?aux(?vp)>] -> AUX[SEM = <?aux>] VP[SEM = <?vp>]
+      VP[SEM = <?v(?vp)>] -> ADV[SEM=?v] VP[SEM=?vp]  
+      NP[SEM=<?pn>] -> PN[SEM=?pn]
+      NP[SEM=<?prn>] -> PRN[SEM=?prn]
     ############################ 
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'a'
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'the'
