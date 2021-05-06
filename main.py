@@ -36,32 +36,43 @@ def semantics_interface(tokens):
     ############################
     # Grammar rules
     ############################
-      S[SEM  = <?sub(?vp)>]  -> NP[SEM=?subj] VP[SEM=?vp]
-      PP[SEM = <?prep(?np)>] -> P[SEM=?prep] NP[SEM=?np]
-      NP[SEM = <?det(?nom)>] -> DT[SEM=?det] N[SEM=?nom]
-      N[SEM  = <?nom(?pp)>]  -> N[SEM=?nom] PP[SEM=?pp]
-      N[SEM = <?adj(?nom)>]  -> Adj[SEM=?adj] N[SEM=?nom]
-      VP[SEM = <?iv>] -> IV[SEM=?iv]
-      VP[SEM = <?v(?obj)>] -> TV[SEM=?v] NP[SEM=?obj]
-      VP[SEM = <?v(?obj(?obj))>] -> DTV[SEM=?v] NP[SEM=?obj] NP[SEM=?obj]
-      VP[SEM = <?v(?obj(?prep))>] -> DTV[SEM=?obj] NP[SEM=?obj] PP[SEM=?prep]
-      VP[SEM = <?vp(?pp)>] -> VP[SEM=?vp] PP[SEM=?vp]
-      VP[SEM = <?v(?vp)>] -> SV[SEM=?v] S[SEM=?vp]
-      VP[SEM = <?aux(?vp)>] -> AUX[SEM = <?aux>] VP[SEM = <?vp>]
-      VP[SEM = <?v(?vp)>] -> ADV[SEM=?v] VP[SEM=?vp]  
-      NP[SEM=<?pn>] -> PN[SEM=?pn]
-      NP[SEM=<?prn>] -> PRN[SEM=?prn]
+      
+      // Declarative
+      S[SEM =  <?np(?vp)>]  ->  NP[SEM=?np] VP[SEM=?vp]
+      S[SEM =  <?pn(?vp)>]  ->  PN[SEM=?pn] VP[SEM=?vp]
+      
+      // Wh-Questions
+      S[SEM  = <?wp(?vp)>]  ->  WP[SEM=?wp] VP[SEM=?vp]
+      
+      // Yes-No Questions
+      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
+
+      NP[SEM = <?dt(?np)>]  ->  DT[SEM=?dt] NP[SEM=?np]
+      NP[SEM = <?adj(?np)>] ->  ADJ[SEM=?adj] NP[SEM=?np]
+      NP[SEM = <?n(?vp)>]   ->  N[SEM=?n] VP[SEM=?vp]
+      NP[SEM = <?pn>]       ->  PN[SEM=?pn]
+      NP[SEM = <?n>]        ->  N[SEM=?n]
+
+      
+      VP[SEM = <?v(?vp)>]  ->   V[SEM=?v]     VP[SEM=?vp]
+      VP[SEM = <?tv(?p)>]   ->  TV[SEM=?tv]   P[SEM=?p]
+      VP[SEM = <?itv(?p)>]  ->  ITV[SEM=?itv] P[SEM=?p]
+      VP[SEM = <?tv(?p)>]   ->  TV[SEM=?tv]   P[SEM=?p]
+      VP[SEM = <?p(?np)>]   ->  P[SEM=?p]     NP[SEM=?np]
+
+      P[SEM = <?dt(?np)>]   -> DT[SEM=?dt] NP[SEM=?np]
+
     ############################ 
       DT -> A 
       Adj -> tall skinny big strong powerful short huge funny smart nice mean
       P -> about in as to ad into for near above as like since 
       C -> that 
+      Aux -> be | have
       WP -> who what 
-      ITV -> act adapt crawl danse erupt escape leave start party panic
+      ITV -> act adapt crawl danse erupt escape leave start party panic sneeze
       TV -> grab impower hold push build mold hug love juice obliterate 
       N -> man boy cat dog time house company cow program company study owner door check corner job dealership office customer sailor member employee
-      PN -> Jimmy James Jordan Grant Holtzman Bob Joe Jim Jeff George 
-      VPB ->sneeze
+      PN -> jimmy james jordan grant holtzman bob joe jim jeff george 
   """        
     return grammer_str
     
@@ -78,9 +89,8 @@ def verb_checking(verb,noun1,noun2,m,init):
     
 print(tokenize("what is there?"))
     #determine_type("A man entered the dealership.")
-  """  
     # part 4
 def CFG():
   
-my_grammar = nltk.CFG.fromstring(string)
+  my_grammar = nltk.CFG.fromstring(string)
 
