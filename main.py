@@ -9,13 +9,6 @@ from nltk.tokenize import wordpunct_tokenize
 from nltk.corpus import wordnet
 from nltk.parse import stanford
 from functools import * 
-# !wget 'https://nlp.stanford.edu/software/stanford-tagger-4.2.0.zip'
-# !unzip 'stanford-tagger-4.2.0.zip'
-
-# jar = '/content/stanford-postagger-4.2.0'
-# model = '/content/stanford-postagger-full-2020-11-17/models/english-left3words-distsim.tagger'
-
-
 
 def tokenize(words):
   words = words.lower()
