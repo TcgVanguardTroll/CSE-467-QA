@@ -37,24 +37,28 @@ def semantics_interface(tokens):
     # Grammar rules
     ############################
       
-      // Declarative (A Tall Skinny man coughed)
+      // Declarative
       S[SEM =  <?np(?vp)>]  ->  NP[SEM=?np] VP[SEM=?vp]
       
       // Wh-Questions
-      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
+      S[SEM  = <?w(?np(?vp))>]             ->  WP[SEM=?w] NP[SEM=?np] VP[SEM=?vp]
+      S[SEM  = <?w(?np(?aux(?np(?vp))))>]  ->  WP[SEM=?w] NP[SEM=?np] AUX[SEM=?aux] NP[SEM=?np] VP[SEM=?vp]
+
       
       // Yes-No Questions
-      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
+      S[SEM  = <?aux(?np(?vp))>]  ->  AUX[SEM=?aux] NP[SEM=?np] VP[SEM=?vp]
 
-      NP[SEM = <?n>]         ->  N[SEM=?n]
-      NP[SEM = <?n(?p)]      ->  N[SEM=?n]     P[SEM = ?p]
       NP[SEM = <?pn>]        ->  PN[SEM=?pn]
+      NP[SEM = <?n>]         ->  N[SEM=?n]
+      NP[SEM = <?dt(?n)>]    ->  DT[SEM=?dt]  N[SEM=?n]
+      NP[SEM = <?n(?p)>]     ->  N[SEM=?n]    P[SEM = ?p]
       NP[SEM = <?np(?p)>]    ->  NP[SEM=?np]   P[SEM=?p]            
-      NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]    WP[SEM=?w]
+      NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]   WP[SEM=?w]
       NP[SEM = <?adj(?np)>]  ->  ADJ[SEM=?adj] NP[SEM=?np]
       NP[SEM = <?p(?np)>]    ->  P[SEM=?p]     NP[SEM=?np]
       
       VP[SEM = <?v(?vp)>]    ->  ITV[SEM=?v]    VP[SEM =?vp]
+      VP[SEM = <?wp(?vp)>]   ->  WP[SEM =?wp]   VP[SEM=?vp]
       VP[SEM = <?v(?p)>]     ->  TV[SEM=?v]     P[SEM=?p]
       VP[SEM = <?v(?np)>]    ->  TV[SEM=?v]     NP[SEM=?np]
       VP[SEM = <?p(?np)>]    ->  P[SEM=?p]      NP[SEM=?np]
@@ -63,14 +67,15 @@ def semantics_interface(tokens):
       P[SEM = <?dt(?np)>]   ->  DT[SEM=?dt]     NP[SEM=?np]
 
       WP[SEM = <?w>]        ->  W[SEM =?w]
-      WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
+    // I'm sunure about his rule
+    // WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
 
     ############################ 
       DT -> A 
       Adj -> tall skinny big strong powerful short huge funny smart nice mean
       P -> about in as to ad into for near above as like since 
       C -> that 
-      Aux -> be | have
+      Aux -> be | have | do
       WP -> who what 
       ITV -> act adapt crawl danse erupt escape leave start party panic sneeze
       TV -> grab impower hold push build mold hug love juice obliterate 
