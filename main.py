@@ -37,30 +37,33 @@ def semantics_interface(tokens):
     # Grammar rules
     ############################
       
-      // Declarative
+      // Declarative (A Tall Skinny man coughed)
       S[SEM =  <?np(?vp)>]  ->  NP[SEM=?np] VP[SEM=?vp]
-      S[SEM =  <?pn(?vp)>]  ->  PN[SEM=?pn] VP[SEM=?vp]
       
       // Wh-Questions
-      S[SEM  = <?wp(?vp)>]  ->  WP[SEM=?wp] VP[SEM=?vp]
+      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
       
       // Yes-No Questions
       S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
 
-      NP[SEM = <?dt(?np)>]  ->  DT[SEM=?dt] NP[SEM=?np]
-      NP[SEM = <?adj(?np)>] ->  ADJ[SEM=?adj] NP[SEM=?np]
-      NP[SEM = <?n(?vp)>]   ->  N[SEM=?n] VP[SEM=?vp]
-      NP[SEM = <?pn>]       ->  PN[SEM=?pn]
-      NP[SEM = <?n>]        ->  N[SEM=?n]
-
+      NP[SEM = <?n>]         ->  N[SEM=?n]
+      NP[SEM = <?n(?p)]      ->  N[SEM=?n]     P[SEM = ?p]
+      NP[SEM = <?pn>]        ->  PN[SEM=?pn]
+      NP[SEM = <?np(?p)>]    ->  NP[SEM=?np]   P[SEM=?p]            
+      NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]    WP[SEM=?w]
+      NP[SEM = <?adj(?np)>]  ->  ADJ[SEM=?adj] NP[SEM=?np]
+      NP[SEM = <?p(?np)>]    ->  P[SEM=?p]     NP[SEM=?np]
       
-      VP[SEM = <?v(?vp)>]  ->   V[SEM=?v]     VP[SEM=?vp]
-      VP[SEM = <?tv(?p)>]   ->  TV[SEM=?tv]   P[SEM=?p]
-      VP[SEM = <?itv(?p)>]  ->  ITV[SEM=?itv] P[SEM=?p]
-      VP[SEM = <?tv(?p)>]   ->  TV[SEM=?tv]   P[SEM=?p]
-      VP[SEM = <?p(?np)>]   ->  P[SEM=?p]     NP[SEM=?np]
+      VP[SEM = <?v(?vp)>]    ->  ITV[SEM=?v]    VP[SEM =?vp]
+      VP[SEM = <?v(?p)>]     ->  TV[SEM=?v]     P[SEM=?p]
+      VP[SEM = <?v(?np)>]    ->  TV[SEM=?v]     NP[SEM=?np]
+      VP[SEM = <?p(?np)>]    ->  P[SEM=?p]      NP[SEM=?np]
 
-      P[SEM = <?dt(?np)>]   -> DT[SEM=?dt] NP[SEM=?np]
+      P[SEM = <?p(?np)>]    ->  P[SEM=?p]       NP[SEM=?np]
+      P[SEM = <?dt(?np)>]   ->  DT[SEM=?dt]     NP[SEM=?np]
+
+      WP[SEM = <?w>]        ->  W[SEM =?w]
+      WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
 
     ############################ 
       DT -> A 
