@@ -14,9 +14,6 @@ from functools import *
 
 # jar = '/content/stanford-postagger-4.2.0'
 # model = '/content/stanford-postagger-full-2020-11-17/models/english-left3words-distsim.tagger'
-
-
-
 def tokenize(words):
   words = words.lower()
   raw_tokens =  list(filter(lambda x: re.match(r"[A-Za-z]",x),nltk.word_tokenize(words)))
@@ -232,12 +229,13 @@ def eval_sen(sen):
     (m,init) = create_model() 
     (parser,grammer) = semantics_interface() 
     parses = [tree.label()['SEM'] for tree in parser.parse(tokens)] 
-    print(parses)
+  #  print(parses)
     
-    results = nltk.evaluate_sents([sen], grammer, m, init)[0]
+    results = nltk.evaluate_sents([" ".join(tokens)], grammer, m, init)[0]
     for (syntree, semrep, value) in results:
-        print(semrep)
-        print(value) 
+        if semrep:
+            print("I know that")
+        #print(value) 
   
-eval_sen("jimmy is a sailor")
+eval_sen("george grabbed the cow")
 
