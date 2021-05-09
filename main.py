@@ -29,7 +29,7 @@ def tokenize(words):
     ]
 
 
-def semantics_interface(tokens):
+def semantics_interface():
 # take tokens and build a  Semantics interface
     grammer_str = """
     # % start S
@@ -131,7 +131,8 @@ def semantics_interface(tokens):
 
       VPB ->sneeze
       """
-    
+    return  nltk.parse.FeatureChartParser(grammer_str)     
+
     def create_model():
         v = """
         jimmy => ji 
@@ -207,14 +208,14 @@ def semantics_interface(tokens):
 
 
         """
-        value = nltk.Valuation.fromstring()    
+        value = nltk.Valuation.fromstring(v)    
         init = nltk.Assignment(value.domain)
         m = nltk.Model(value.domain,value)
         return (m,init) 
     
- #   def eval(sen,)
-
-    
+    def eval_sen(sen):
+        m = create_model() 
+        si= semantics_interface() 
 
     
     print(tokenize("what is there?"))
