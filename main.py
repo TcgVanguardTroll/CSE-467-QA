@@ -23,7 +23,7 @@ def tokenize(words):
   type_map = {'J':wordnet.ADJ,'V':wordnet.VERB,'N':wordnet.NOUN,'R':wordnet.ADV,'D':wordnet.NOUN}
   lemma =  nltk.stem.WordNetLemmatizer()
   return [
-      (lemma.lemmatize(token,type_map[type_value[0]]),type_value) if type_value[0] in type_map
+      (lemma.lemmatize(token,type_map[type_value[0]])) if type_value[0] in type_map
       else (lemma.lemmatize(token),type_value)
       for token,type_value in tagged
     ]
@@ -225,25 +225,23 @@ def semantics_interface():
         m = nltk.Model(value.domain,value)
         return (m,init) 
     
-    def eval_sen(sen):
-        m = create_model() 
-        si= semantics_interface() 
-        return grammer_str
-    
-    
 def create_model(v):
       value = nltk.Valuation.fromstring(v)    
       init = nltk.Assignment(value.domain)
       m = nltk.Model(value.domain,value)
       return (m,init) 
+
+def eval_sen(sen):
+
+    tokens = tokenize(sen)
+    print(tokens)
+   # m = create_model(tokens) 
+    parser = semantics_interface() 
     
-def verb_checking(verb,noun1,noun2,m,init):
-  check_string= f"{verb}({noun1},{noun2})" 
-  return m.evaluate(check_string,init) 
+    parses = [tree.label()['SEM'] for tree in parser.parse(tokens)]    
+ #   print(parses)
+
     
-print(tokenize("what is there?"))
-    #determine_type("A man entered the dealership.")
   
-    # part 4
-  
+eval_sen("jim is big")
 
