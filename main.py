@@ -32,7 +32,7 @@ def tokenize(words):
 def semantics_interface():
     # take tokens and build a  Semantics interface
     grammer_str = """
-    # % start S
+    % start S
     # Grammar rules
       
       // Declarative
@@ -69,6 +69,9 @@ def semantics_interface():
     // WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
 
     ############################ 
+
+    # Lexicon rules
+
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'a'
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'the'
 
@@ -147,7 +150,10 @@ def semantics_interface():
 
       VPB ->sneeze
       """
-    return  nltk.parse.FeatureChartParser(grammer_str)     
+    # Prepare to parse the above phrase-structure feature grammar
+    grammar = nltk.grammar.FeatureGrammar.fromstring(grammer_str)
+
+    return  nltk.parse.FeatureChartParser(grammar)     
 
     def create_model():
         v = """
