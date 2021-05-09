@@ -97,6 +97,7 @@ def semantics_interface():
       C -> 'that' 
 
       WP -> 'who' 'what' 
+      IV[SEM=<\x.is>] -> 'be'
       IV[SEM=<\x.is>] -> 'is'
       IV[SEM=<\x.act>] -> 'act' 
       IV[SEM=<\x.adapt>] -> 'adapt' 
@@ -109,16 +110,16 @@ def semantics_interface():
       IV[SEM=<\x.party>] -> 'party'
       IV[SEM=<\x.panic>] -> 'panic'
 
-      TV[SEM=<\X x.X(\y.grab(x,y))>] -> grab 
-      TV[SEM=<\X x.X(\y.impower(x,y))>] -> impower 
-      TV[SEM=<\X x.X(\y.hold(x,y))>] -> hold 
-      TV[SEM=<\X x.X(\y.push(x,y))>] -> push 
-      TV[SEM=<\X x.X(\y.build(x,y))>] -> build 
-      TV[SEM=<\X x.X(\y.mold(x,y))>] -> mold 
-      TV[SEM=<\X x.X(\y.hug(x,y))>] -> hug 
-      TV[SEM=<\X x.X(\y.love(x,y))>] -> love 
-      TV[SEM=<\X x.X(\y.juice(x,y))>] -> juice 
-      TV[SEM=<\X x.X(\y.obliterate(x,y))>] -> obliterate 
+      TV[SEM=<\X x.X(\y.grab(x,y))>] -> 'grab'
+      TV[SEM=<\X x.X(\y.impower(x,y))>] -> 'impower'
+      TV[SEM=<\X x.X(\y.hold(x,y))>] -> 'hold'
+      TV[SEM=<\X x.X(\y.push(x,y))>] -> 'push'
+      TV[SEM=<\X x.X(\y.build(x,y))>] -> 'build'
+      TV[SEM=<\X x.X(\y.mold(x,y))>] -> 'mold'
+      TV[SEM=<\X x.X(\y.hug(x,y))>] -> 'hug'
+      TV[SEM=<\X x.X(\y.love(x,y))>] -> 'love'
+      TV[SEM=<\X x.X(\y.juice(x,y))>] ->'juice'
+      TV[SEM=<\X x.X(\y.obliterate(x,y))>] -> 'obliterate'
 
       N[SEM=<\x.man(x)>]-> 'man' 
       N[SEM=<\x.man(x)>] ->'boy' 
@@ -155,10 +156,10 @@ def semantics_interface():
       VPB ->'sneeze'
       """
     g= nltk.grammar.FeatureGrammar.fromstring(grammer_str) 
-    return  nltk.parse.FeatureChartParser(g,trace=1)     
+    return  (nltk.parse.FeatureChartParser(g,trace=0),g)    
 
-    def create_model():
-        v = """
+def create_model():
+    v = """
         jimmy => ji 
         jordan => jo 
         jeff => je
@@ -166,19 +167,6 @@ def semantics_interface():
         george => g 
         bob => b
         sarah => s
-
-
-
-        grab       =>{}  
-        impower    =>{} 
-        hold       =>{}
-        push       =>{}
-        build      =>{}
-        mold       =>{}
-        hug        =>{}
-        love       =>{}
-        juice      =>{}
-        obliterate =>{}
 
         man       =>{m1}
         boy       =>{b1}
@@ -202,57 +190,54 @@ def semantics_interface():
         member    =>{me1}
         employee  =>{e1}
 
-        
 
-        grab    =>     {}
-        impower    =>  {}
-        hold    =>     {}
-        push    =>     {}
-        build    =>    {}
-        mold    =>     {}
-        hug    =>      {}
-        love    =>     {}
-        juice    =>    {}
-        obliterate   =>{}
+        grab    =>     {(d,c1)}
+        got =>         {(g,j1)}
+        impower    =>  {(ji,jo)}
+        hold    =>     {(d,c1)}
+        push    =>     {(m1,b)}
+        build    =>    {(je,h1)}
+        mold    =>     {(ji,jco1)}
+        hug    =>      {(s,m1)}
+        love    =>     {(ji,s)}
+        milk    =>     {(b1,cw1)}
+        obliterate   =>{(e1,cu1)}
 
         funny => {ji}
         study   => {jo}
         tall    => {d}
-        strong  => {}
-        powerful=> {} 
-        short   => {}
-        huge    => {}
-        funny   => {}
-        smart   => {}
-        nice    => {}
-        mean    => {}
-        skinny  => {}
-        big     => {}
-        large  '=> {}
+        strong  => {g}
+        powerful=> {m1} 
+        short   => {s}
+        huge    => {j1}
+        smart   => {d1}
+        nice    => {me1}
+        mean    => {je}
+        skinny  => {sa1}
+        big     => {cu1}
+        large   => {}
 
 
-        """
-        value = nltk.Valuation.fromstring(v)    
-        init = nltk.Assignment(value.domain)
-        m = nltk.Model(value.domain,value)
-        return (m,init) 
+    """
+    value = nltk.Valuation.fromstring(v)    
+    init = nltk.Assignment(value.domain)
+    m = nltk.Model(value.domain,value)
+    return (m,init) 
     
-def create_model(v):
-      value = nltk.Valuation.fromstring(v)    
-      init = nltk.Assignment(value.domain)
-      m = nltk.Model(value.domain,value)
-      return (m,init) 
 
 def eval_sen(sen):
 
     tokens = tokenize(sen)
     print(tokens)
-   # m = create_model(tokens) 
-    parser = semantics_interface() 
+    (m,init) = create_model() 
+    (parser,grammer) = semantics_interface() 
     parses = [tree.label()['SEM'] for tree in parser.parse(tokens)] 
     print(parses)
-
     
+    results = nltk.evaluate_sents([sen], grammer, m, init)[0]
+    for (syntree, semrep, value) in results:
+        print(semrep)
+        print(value) 
   
-eval_sen("jimmy leave")
+eval_sen("jimmy is a sailor")
 
