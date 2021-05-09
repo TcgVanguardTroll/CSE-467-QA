@@ -4,10 +4,11 @@ import os
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
+from nltk import grammar, parse
+from nltk.tokenize import wordpunct_tokenize
 from nltk.corpus import wordnet
 from nltk.parse import stanford
 from functools import * 
-
 # !wget 'https://nlp.stanford.edu/software/stanford-tagger-4.2.0.zip'
 # !unzip 'stanford-tagger-4.2.0.zip'
 
@@ -17,6 +18,7 @@ from functools import *
 
 
 def tokenize(words):
+  words = words.lower()
   raw_tokens =  list(filter(lambda x: re.match(r"[A-Za-z]",x),nltk.word_tokenize(words)))
   
   tagged = nltk.pos_tag(raw_tokens) 
@@ -31,21 +33,19 @@ def tokenize(words):
 
 def semantics_interface():
 # take tokens and build a  Semantics interface
-    grammer_str = """
-    # % start S
+    grammer_str = r"""
+     % start S
     # Grammar rules
       
-      // Declarative (A Tall Skinny man coughed)
+      # Declarative (A Tall Skinny man coughed)
       S[SEM =  <?np(?vp)>]  ->  NP[SEM=?np] VP[SEM=?vp]
       
-      // Wh-Questions
       S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
       
-      // Yes-No Questions
       S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
 
       NP[SEM = <?n>]         ->  N[SEM=?n]
-      NP[SEM = <?n(?p)]      ->  N[SEM=?n]     P[SEM = ?p]
+      NP[SEM = <?n(?p)>]      ->  N[SEM=?n]     P[SEM = ?p]
       NP[SEM = <?pn>]        ->  PN[SEM=?pn]
       NP[SEM = <?np(?p)>]    ->  NP[SEM=?np]   P[SEM=?p]            
       NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]    WP[SEM=?w]
@@ -96,54 +96,64 @@ def semantics_interface():
       C -> that 
 
       WP -> who what 
-      ITV -> act adapt crawl danse erupt escape leave start party panic
-      TV[SEM=<\\x x.x(\y.grab(x,y))] -> grab 
-      TV[SEM=<\\x x.x(\y.impower(x,y))] -> impower 
-      TV[SEM=<\\x x.x(\y.hold(x,y))] -> hold 
-      TV[SEM=<\\x x.x(\y.push(x,y))] -> push 
-      TV[SEM=<\\x x.x(\y.build(x,y))] -> build 
-      TV[SEM=<\\x x.x(\y.mold(x,y))] -> mold 
-      TV[SEM=<\\x x.x(\y.hug(x,y))] -> hug 
-      TV[SEM=<\\x x.x(\y.love(x,y))] -> love 
-      TV[SEM=<\\x x.x(\y.juice(x,y))] -> juice 
-      TV[SEM=<\\x x.x(\y.obliterate(x,y))] -> obliterate 
+      IV[SEM=<\x.is] -> is 
+      IV[SEM=<\x.act] -> act 
+      IV[SEM=<\x.adapt] -> adapt 
+      IV[SEM=<\x.crawl] -> crawl 
+      IV[SEM=<\x.danse] -> danse 
+      IV[SEM=<\x.erupt] -> erupt 
+      IV[SEM=<\x.escape] -> escape 
+      IV[SEM=<\x.leave] -> leave 
+      IV[SEM=<\x.start] -> start 
+      IV[SEM=<\x.party] -> party 
+      IV[SEM=<\x.panic] -> panic
+      TV[SEM=<\x x.x(\y.grab(x,y))] -> grab 
+      TV[SEM=<\x x.x(\y.impower(x,y))] -> impower 
+      TV[SEM=<\x x.x(\y.hold(x,y))] -> hold 
+      TV[SEM=<\x x.x(\y.push(x,y))] -> push 
+      TV[SEM=<\x x.x(\y.build(x,y))] -> build 
+      TV[SEM=<\x x.x(\y.mold(x,y))] -> mold 
+      TV[SEM=<\x x.x(\y.hug(x,y))] -> hug 
+      TV[SEM=<\x x.x(\y.love(x,y))] -> love 
+      TV[SEM=<\x x.x(\y.juice(x,y))] -> juice 
+      TV[SEM=<\x x.x(\y.obliterate(x,y))] -> obliterate 
 
-      N[SEM=<\\x.man(x)>]-> man 
-      N[SEM=<\\x.man(x)>] ->boy 
-      N[SEM=<\\x.pet(x)>] ->cat 
-      N[SEM=<\\x.pet(x)>] ->dog 
-      N[SEM=<\\x.time(x)>] ->time 
-      N[SEM=<\\x.home(x)>] ->house 
-      N[SEM=<\\x.company(x)>] ->company 
-      N[SEM=<\\x.cow(x)>] ->cow 
-      N[SEM=<\\x.program(x)>] ->program 
-      N[SEM=<\\x.study(x)>] ->study 
-      N[SEM=<\\x.owner(x)>] ->owner 
-      N[SEM=<\\x.man(x)>] ->door 
-      N[SEM=<\\x.check(x)>] ->check 
-      N[SEM=<\\x.corner(x)>] ->corner 
-      N[SEM=<\\x.job(x)>] ->job 
-      N[SEM=<\\x.dealership(x)>] ->dealership 
-      N[SEM=<\\x.office(x)>] ->office 
-      N[SEM=<\\x.customer(x)>] ->customer 
-      N[SEM=<\\x.sailor(x)>] ->sailor 
-      N[SEM=<\\x.man(x)>] ->member 
-      N[SEM=<\\x.man(x)>] ->employee
+      N[SEM=<\x.man(x)>]-> man 
+      N[SEM=<\x.man(x)>] ->boy 
+      N[SEM=<\x.pet(x)>] ->cat 
+      N[SEM=<\x.pet(x)>] ->dog 
+      N[SEM=<\x.time(x)>] ->time 
+      N[SEM=<\x.home(x)>] ->house 
+      N[SEM=<\x.company(x)>] ->company 
+      N[SEM=<\x.cow(x)>] ->cow 
+      N[SEM=<\x.program(x)>] ->program 
+      N[SEM=<\x.study(x)>] ->study 
+      N[SEM=<\x.owner(x)>] ->owner 
+      N[SEM=<\x.man(x)>] ->door 
+      N[SEM=<\x.check(x)>] ->check 
+      N[SEM=<\x.corner(x)>] ->corner 
+      N[SEM=<\x.job(x)>] ->job 
+      N[SEM=<\x.dealership(x)>] ->dealership 
+      N[SEM=<\x.office(x)>] ->office 
+      N[SEM=<\x.customer(x)>] ->customer 
+      N[SEM=<\x.sailor(x)>] ->sailor 
+      N[SEM=<\x.man(x)>] ->member 
+      N[SEM=<\x.man(x)>] ->employee
 
-      np[SEM=<\P.P(jimmy)>] -> 'jimmy'
-      np[SEM=<\P.P(jimmy)>] -> 'james' 
-      np[SEM=<\P.P(jimmy)>] -> 'jim'
-      np[SEM=<\P.P(jordan)>] ->'jordan'
-      np[SEM=<\P.P(jimmy)>] -> 'grant'
-      np[SEM=<\P.P(sarah)>] -> 'sarah' 
-      np[SEM=<\P.P(bob)>] -> 'bob'
-      np[SEM=<\P.P(dave)>] -> 'dave'  
-      np[SEM=<\P.P(jeff)>] -> 'jeff'
-      np[SEM=<\P.P(george)>] -> 'george' 
-
+      NP[SEM=<\P.P(jimmy)>] -> 'jimmy'
+      NP[SEM=<\P.P(jimmy)>] -> 'james' 
+      NP[SEM=<\P.P(jimmy)>] -> 'jim'
+      NP[SEM=<\P.P(jordan)>] ->'jordan'
+      NP[SEM=<\P.P(jimmy)>] -> 'grant'
+      NP[SEM=<\P.P(sarah)>] -> 'sarah' 
+      NP[SEM=<\P.P(bob)>] -> 'bob'
+      NP[SEM=<\P.P(dave)>] -> 'dave'  
+      NP[SEM=<\P.P(jeff)>] -> 'jeff'
+      NP[SEM=<\P.P(george)>] -> 'george' 
       VPB ->sneeze
       """
-    return  nltk.parse.FeatureChartParser(grammer_str)     
+    g= nltk.grammar.FeatureGrammar.fromstring(grammer_str) 
+    return  nltk.parse.FeatureChartParser(g)     
 
     def create_model():
         v = """
@@ -237,11 +247,10 @@ def eval_sen(sen):
     print(tokens)
    # m = create_model(tokens) 
     parser = semantics_interface() 
-    
-    parses = [tree.label()['SEM'] for tree in parser.parse(tokens)]    
+    parses = [parser.parse(wordpunct_tokenize(sen))]    
  #   print(parses)
 
     
   
-eval_sen("jim is big")
+eval_sen("jimmy")
 
