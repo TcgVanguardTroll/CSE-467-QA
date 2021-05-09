@@ -29,13 +29,11 @@ def tokenize(words):
     ]
 
 
-def semantics_interface(tokens):
-# take tokens and build a  Semantics interface
+def semantics_interface():
+    # take tokens and build a  Semantics interface
     grammer_str = """
     # % start S
-    ############################
     # Grammar rules
-    ############################
       
       // Declarative
       S[SEM =  <?np(?vp)>]  ->  NP[SEM=?np] VP[SEM=?vp]
@@ -71,18 +69,170 @@ def semantics_interface(tokens):
     // WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
 
     ############################ 
-      DT -> A 
-      Adj -> tall skinny big strong powerful short huge funny smart nice mean
-      P -> about in as to ad into for near above as like since 
+      DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'a'
+      DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'the'
+
+      Adj[SEM=<\P x.((P)(x) & tall(x)) ] -> 'tall'   
+      Adj[SEM=<\P x.((P)(x) & strong(x)) ] -> 'strong' 
+      Adj[SEM=<\P x.((P)(x) & strong(x)) ] -> 'powerful' 
+      Adj[SEM=<\P x.((P)(x) & short(x)) ] -> 'short' 
+      Adj[SEM=<\P x.((P)(x) & huge(x)) ] -> 'huge' 
+      Adj[SEM=<\P x.((P)(x) & funny(x)) ] -> 'funny' 
+      Adj[SEM=<\P x.((P)(x) & smart(x)) ] -> 'smart'
+      Adj[SEM=<\P x.((P)(x) & nice(x)) ] -> 'nice'
+      Adj[SEM=<\P x.((P)(x) & mean(x)) ] -> 'mean'
+      Adj[SEM=<\P x.((P)(x) & skinny(x)) ] -> 'skinny'
+      Adj[SEM=<\P x.((P)(x) & big(x)) ] -> 'big'
+      Adj[SEM=<\P x.((P)(x) & big(x)) ] -> 'large'
+
+      P[PFORM=about,SEM<\P.P>] ->'about'   
+      P[PFORM=in   ,SEM<\P.P>] ->'in'  
+      P[PFORM=as   ,SEM<\P.P>] ->'as'  
+      P[PFORM=to   ,SEM<\P.P>] ->'to'  
+      P[PFORM=at   ,SEM<\P.P>] ->'at'  
+      P[PFORM=for  ,SEM<\P.P>] ->'for'  
+      P[PFORM=near ,SEM<\P.P>] ->'near'  
+      P[PFORM=above,SEM<\P.P>] ->'above'  
+      P[PFORM=as   ,SEM<\P.P>] ->'as'
+      P[PFORM=like ,SEM<\P.P>] ->'like'
+      P[PFORM=since,SEM<\P.P>] ->'since'
+                 
+
       C -> that 
-      Aux -> be | have | do
       WP -> who what 
-      ITV -> act adapt crawl danse erupt escape leave start party panic sneeze
-      TV -> grab impower hold push build mold hug love juice obliterate 
-      N -> man boy cat dog time house company cow program company study owner door check corner job dealership office customer sailor member employee
-      PN -> jimmy james jordan grant holtzman bob joe jim jeff george 
-  """        
-    return grammer_str
+      ITV -> act adapt crawl danse erupt escape leave start party panic
+      TV[SEM=<\\x x.x(\y.grab(x,y))] -> grab 
+      TV[SEM=<\\x x.x(\y.impower(x,y))] -> impower 
+      TV[SEM=<\\x x.x(\y.hold(x,y))] -> hold 
+      TV[SEM=<\\x x.x(\y.push(x,y))] -> push 
+      TV[SEM=<\\x x.x(\y.build(x,y))] -> build 
+      TV[SEM=<\\x x.x(\y.mold(x,y))] -> mold 
+      TV[SEM=<\\x x.x(\y.hug(x,y))] -> hug 
+      TV[SEM=<\\x x.x(\y.love(x,y))] -> love 
+      TV[SEM=<\\x x.x(\y.juice(x,y))] -> juice 
+      TV[SEM=<\\x x.x(\y.obliterate(x,y))] -> obliterate 
+
+      N[SEM=<\\x.man(x)>]-> man 
+      N[SEM=<\\x.man(x)>] ->boy 
+      N[SEM=<\\x.pet(x)>] ->cat 
+      N[SEM=<\\x.pet(x)>] ->dog 
+      N[SEM=<\\x.time(x)>] ->time 
+      N[SEM=<\\x.home(x)>] ->house 
+      N[SEM=<\\x.company(x)>] ->company 
+      N[SEM=<\\x.cow(x)>] ->cow 
+      N[SEM=<\\x.program(x)>] ->program 
+      N[SEM=<\\x.study(x)>] ->study 
+      N[SEM=<\\x.owner(x)>] ->owner 
+      N[SEM=<\\x.man(x)>] ->door 
+      N[SEM=<\\x.check(x)>] ->check 
+      N[SEM=<\\x.corner(x)>] ->corner 
+      N[SEM=<\\x.job(x)>] ->job 
+      N[SEM=<\\x.dealership(x)>] ->dealership 
+      N[SEM=<\\x.office(x)>] ->office 
+      N[SEM=<\\x.customer(x)>] ->customer 
+      N[SEM=<\\x.sailor(x)>] ->sailor 
+      N[SEM=<\\x.man(x)>] ->member 
+      N[SEM=<\\x.man(x)>] ->employee
+
+      np[SEM=<\P.P(jimmy)>] -> 'jimmy'
+      np[SEM=<\P.P(jimmy)>] -> 'james' 
+      np[SEM=<\P.P(jimmy)>] -> 'jim'
+      np[SEM=<\P.P(jordan)>] ->'jordan'
+      np[SEM=<\P.P(jimmy)>] -> 'grant'
+      np[SEM=<\P.P(sarah)>] -> 'sarah' 
+      np[SEM=<\P.P(bob)>] -> 'bob'
+      np[SEM=<\P.P(dave)>] -> 'dave'  
+      np[SEM=<\P.P(jeff)>] -> 'jeff'
+      np[SEM=<\P.P(george)>] -> 'george' 
+
+      VPB ->sneeze
+      """
+    return  nltk.parse.FeatureChartParser(grammer_str)     
+
+    def create_model():
+        v = """
+        jimmy => ji 
+        jordan => jo 
+        jeff => je
+        dave => d 
+        george => g 
+        bob => b
+        sarah => s
+
+
+
+        grab       =>{}  
+        impower    =>{} 
+        hold       =>{}
+        push       =>{}
+        build      =>{}
+        mold       =>{}
+        hug        =>{}
+        love       =>{}
+        juice      =>{}
+        obliterate =>{}
+
+        man       =>{m1}
+        boy       =>{b1}
+        cat       =>{ca1}
+        dog       =>{d1}
+        time      =>{t1}
+        house     =>{h1}
+        company   =>{co1}
+        cow       =>{cw1}
+        program   =>{p1}
+        study     =>{s1}
+        owner     =>{o1}
+        door      =>{do1}
+        check     =>{ch1}
+        corner    =>{c1}
+        job       =>{j1}
+        dealership=>{de1} 
+        office    =>{o1}
+        customer  =>{cu1}
+        sailor    =>{sa1}
+        member    =>{me1}
+        employee  =>{e1}
+
+        
+
+        grab    =>     {}
+        impower    =>  {}
+        hold    =>     {}
+        push    =>     {}
+        build    =>    {}
+        mold    =>     {}
+        hug    =>      {}
+        love    =>     {}
+        juice    =>    {}
+        obliterate   =>{}
+
+        funny => {ji}
+        study   => {jo}
+        tall    => {d}
+        strong  => {}
+        powerful=> {} 
+        short   => {}
+        huge    => {}
+        funny   => {}
+        smart   => {}
+        nice    => {}
+        mean    => {}
+        skinny  => {}
+        big     => {}
+        large  '=> {}
+
+
+        """
+        value = nltk.Valuation.fromstring(v)    
+        init = nltk.Assignment(value.domain)
+        m = nltk.Model(value.domain,value)
+        return (m,init) 
+    
+    def eval_sen(sen):
+        m = create_model() 
+        si= semantics_interface() 
+        return grammer_str
     
     
 def create_model(v):
@@ -97,8 +247,7 @@ def verb_checking(verb,noun1,noun2,m,init):
     
 print(tokenize("what is there?"))
     #determine_type("A man entered the dealership.")
-    # part 4
-def CFG():
   
-  my_grammar = nltk.CFG.fromstring(string)
+    # part 4
+  
 
