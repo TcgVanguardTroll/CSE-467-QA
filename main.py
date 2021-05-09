@@ -33,24 +33,36 @@ def semantics_interface():
 # take tokens and build a  Semantics interface
     grammer_str = """
     # % start S
-    ############################
     # Grammar rules
-    ############################
-      S -> NP VP
-      PP -> P NP
-      NP -> DT N
-      N -> N PP
-      N -> Adj N
-      VP -> IV
-      VP -> TV NP
-      VP -> DTV NP NP
-      VP -> DTV NP PP
-      VP -> VP PP
-      VP -> SV S
-      VP -> AUX VP
-      VP -> ADV VP  
-      NP -> PN
-      NP -> PRN
+      
+      // Declarative (A Tall Skinny man coughed)
+      S[SEM =  <?np(?vp)>]  ->  NP[SEM=?np] VP[SEM=?vp]
+      
+      // Wh-Questions
+      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
+      
+      // Yes-No Questions
+      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
+
+      NP[SEM = <?n>]         ->  N[SEM=?n]
+      NP[SEM = <?n(?p)]      ->  N[SEM=?n]     P[SEM = ?p]
+      NP[SEM = <?pn>]        ->  PN[SEM=?pn]
+      NP[SEM = <?np(?p)>]    ->  NP[SEM=?np]   P[SEM=?p]            
+      NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]    WP[SEM=?w]
+      NP[SEM = <?adj(?np)>]  ->  ADJ[SEM=?adj] NP[SEM=?np]
+      NP[SEM = <?p(?np)>]    ->  P[SEM=?p]     NP[SEM=?np]
+      
+      VP[SEM = <?v(?vp)>]    ->  ITV[SEM=?v]    VP[SEM =?vp]
+      VP[SEM = <?v(?p)>]     ->  TV[SEM=?v]     P[SEM=?p]
+      VP[SEM = <?v(?np)>]    ->  TV[SEM=?v]     NP[SEM=?np]
+      VP[SEM = <?p(?np)>]    ->  P[SEM=?p]      NP[SEM=?np]
+
+      P[SEM = <?p(?np)>]    ->  P[SEM=?p]       NP[SEM=?np]
+      P[SEM = <?dt(?np)>]   ->  DT[SEM=?dt]     NP[SEM=?np]
+
+      WP[SEM = <?w>]        ->  W[SEM =?w]
+      WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
+
     ############################ 
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'a'
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'the'
@@ -216,8 +228,22 @@ def semantics_interface():
     def eval_sen(sen):
         m = create_model() 
         si= semantics_interface() 
-
+        return grammer_str
     
-    print(tokenize("what is there?"))
+    
+def create_model(v):
+      value = nltk.Valuation.fromstring(v)    
+      init = nltk.Assignment(value.domain)
+      m = nltk.Model(value.domain,value)
+      return (m,init) 
+    
+def verb_checking(verb,noun1,noun2,m,init):
+  check_string= f"{verb}({noun1},{noun2})" 
+  return m.evaluate(check_string,init) 
+    
+print(tokenize("what is there?"))
     #determine_type("A man entered the dealership.")
   
+    # part 4
+  
+
