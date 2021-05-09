@@ -67,56 +67,57 @@ def semantics_interface():
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'a'
       DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'the'
 
-      Adj[SEM=<\P x.((P)(x) & tall(x)) ] -> 'tall'   
-      Adj[SEM=<\P x.((P)(x) & strong(x)) ] -> 'strong' 
-      Adj[SEM=<\P x.((P)(x) & strong(x)) ] -> 'powerful' 
-      Adj[SEM=<\P x.((P)(x) & short(x)) ] -> 'short' 
-      Adj[SEM=<\P x.((P)(x) & huge(x)) ] -> 'huge' 
-      Adj[SEM=<\P x.((P)(x) & funny(x)) ] -> 'funny' 
-      Adj[SEM=<\P x.((P)(x) & smart(x)) ] -> 'smart'
-      Adj[SEM=<\P x.((P)(x) & nice(x)) ] -> 'nice'
-      Adj[SEM=<\P x.((P)(x) & mean(x)) ] -> 'mean'
-      Adj[SEM=<\P x.((P)(x) & skinny(x)) ] -> 'skinny'
-      Adj[SEM=<\P x.((P)(x) & big(x)) ] -> 'big'
-      Adj[SEM=<\P x.((P)(x) & big(x)) ] -> 'large'
+      Adj[SEM=<\P x.((P)(x) & tall(x))>] -> 'tall'   
+      Adj[SEM=<\P x.((P)(x) & strong(x))>] -> 'strong' 
+      Adj[SEM=<\P x.((P)(x) & strong(x))>] -> 'powerful' 
+      Adj[SEM=<\P x.((P)(x) & short(x))>] -> 'short' 
+      Adj[SEM=<\P x.((P)(x) & huge(x))>] -> 'huge' 
+      Adj[SEM=<\P x.((P)(x) & funny(x))>] -> 'funny' 
+      Adj[SEM=<\P x.((P)(x) & smart(x))>] -> 'smart'
+      Adj[SEM=<\P x.((P)(x) & nice(x))>] -> 'nice'
+      Adj[SEM=<\P x.((P)(x) & mean(x))>] -> 'mean'
+      Adj[SEM=<\P x.((P)(x) & skinny(x))>] -> 'skinny'
+      Adj[SEM=<\P x.((P)(x) & big(x))>] -> 'big'
+      Adj[SEM=<\P x.((P)(x) & big(x))>] -> 'large'
 
-      P[PFORM=about,SEM<\P.P>] ->'about'   
-      P[PFORM=in   ,SEM<\P.P>] ->'in'  
-      P[PFORM=as   ,SEM<\P.P>] ->'as'  
-      P[PFORM=to   ,SEM<\P.P>] ->'to'  
-      P[PFORM=at   ,SEM<\P.P>] ->'at'  
-      P[PFORM=for  ,SEM<\P.P>] ->'for'  
-      P[PFORM=near ,SEM<\P.P>] ->'near'  
-      P[PFORM=above,SEM<\P.P>] ->'above'  
-      P[PFORM=as   ,SEM<\P.P>] ->'as'
-      P[PFORM=like ,SEM<\P.P>] ->'like'
-      P[PFORM=since,SEM<\P.P>] ->'since'
+      P[PFORM=about,SEM=<\P.P>] ->'about'   
+      P[PFORM=in   ,SEM=<\P.P>] ->'in'  
+      P[PFORM=as   ,SEM=<\P.P>] ->'as'  
+      P[PFORM=to   ,SEM=<\P.P>] ->'to'  
+      P[PFORM=at   ,SEM=<\P.P>] ->'at'  
+      P[PFORM=for  ,SEM=<\P.P>] ->'for'  
+      P[PFORM=near ,SEM=<\P.P>] ->'near'  
+      P[PFORM=above,SEM=<\P.P>] ->'above'  
+      P[PFORM=as   ,SEM=<\P.P>] ->'as'
+      P[PFORM=like ,SEM=<\P.P>] ->'like'
+      P[PFORM=since,SEM=<\P.P>] ->'since'
                  
 
       C -> that 
 
       WP -> who what 
-      IV[SEM=<\x.is] -> is 
-      IV[SEM=<\x.act] -> act 
-      IV[SEM=<\x.adapt] -> adapt 
-      IV[SEM=<\x.crawl] -> crawl 
-      IV[SEM=<\x.danse] -> danse 
-      IV[SEM=<\x.erupt] -> erupt 
-      IV[SEM=<\x.escape] -> escape 
-      IV[SEM=<\x.leave] -> leave 
-      IV[SEM=<\x.start] -> start 
-      IV[SEM=<\x.party] -> party 
-      IV[SEM=<\x.panic] -> panic
-      TV[SEM=<\x x.x(\y.grab(x,y))] -> grab 
-      TV[SEM=<\x x.x(\y.impower(x,y))] -> impower 
-      TV[SEM=<\x x.x(\y.hold(x,y))] -> hold 
-      TV[SEM=<\x x.x(\y.push(x,y))] -> push 
-      TV[SEM=<\x x.x(\y.build(x,y))] -> build 
-      TV[SEM=<\x x.x(\y.mold(x,y))] -> mold 
-      TV[SEM=<\x x.x(\y.hug(x,y))] -> hug 
-      TV[SEM=<\x x.x(\y.love(x,y))] -> love 
-      TV[SEM=<\x x.x(\y.juice(x,y))] -> juice 
-      TV[SEM=<\x x.x(\y.obliterate(x,y))] -> obliterate 
+      IV[SEM=<\x.is>] -> is 
+      IV[SEM=<\x.act>] -> act 
+      IV[SEM=<\x.adapt>] -> adapt 
+      IV[SEM=<\x.crawl>] -> crawl 
+      IV[SEM=<\x.danse>] -> danse 
+      IV[SEM=<\x.erupt>] -> erupt 
+      IV[SEM=<\x.escape>] -> escape 
+      IV[SEM=<\x.leave>] -> leave 
+      IV[SEM=<\x.start>] -> start 
+      IV[SEM=<\x.party>] -> party 
+      IV[SEM=<\x.panic>] -> panic
+
+      TV[SEM=<\X x.X(\y.grab(x,y))>] -> grab 
+      TV[SEM=<\X x.X(\y.impower(x,y))>] -> impower 
+      TV[SEM=<\X x.X(\y.hold(x,y))>] -> hold 
+      TV[SEM=<\X x.X(\y.push(x,y))>] -> push 
+      TV[SEM=<\X x.X(\y.build(x,y))>] -> build 
+      TV[SEM=<\X x.X(\y.mold(x,y))>] -> mold 
+      TV[SEM=<\X x.X(\y.hug(x,y))>] -> hug 
+      TV[SEM=<\X x.X(\y.love(x,y))>] -> love 
+      TV[SEM=<\X x.X(\y.juice(x,y))>] -> juice 
+      TV[SEM=<\X x.X(\y.obliterate(x,y))>] -> obliterate 
 
       N[SEM=<\x.man(x)>]-> man 
       N[SEM=<\x.man(x)>] ->boy 
@@ -247,8 +248,8 @@ def eval_sen(sen):
     print(tokens)
    # m = create_model(tokens) 
     parser = semantics_interface() 
-    parses = [parser.parse(wordpunct_tokenize(sen))]    
- #   print(parses)
+    parses = [parser.parse(wordpunct_tokenize(tokens))]    
+    print(parses)
 
     
   
