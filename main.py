@@ -35,14 +35,14 @@ def semantics_interface():
     # Grammar rules
       
       # Declarative (A Tall Skinny man coughed)
-      S[SEM =  <?np(?vp)>]  ->  NP[SEM=?np] VP[SEM=?vp]
+      S[SEM =  <?subj(?vp)>]  ->  NP[SEM=?subj] VP[SEM=?vp]
       
-      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
-      
-      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
+#      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
+#      
+#      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
 
-      NP[SEM = <?n>]         ->  N[SEM=?n]
-      NP[SEM = <?n(?p)>]      ->  N[SEM=?n]     P[SEM = ?p]
+      NP[SEM = <?det(?n)>]   ->  DT[SEM=?det] N[SEM=?n]
+      NP[SEM = <?n(?p)>]     ->  N[SEM=?n]     P[SEM = ?p]
       NP[SEM = <?pn>]        ->  PN[SEM=?pn]
       NP[SEM = <?np(?p)>]    ->  NP[SEM=?np]   P[SEM=?p]            
       NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]    WP[SEM=?w]
@@ -53,7 +53,7 @@ def semantics_interface():
       VP[SEM = <?v(?p)>]     ->  TV[SEM=?v]     P[SEM=?p]
       VP[SEM = <?v(?np)>]    ->  TV[SEM=?v]     NP[SEM=?np]
       VP[SEM = <?p(?np)>]    ->  P[SEM=?p]      NP[SEM=?np]
-      VP[SEM = <?v(?vp)>]    ->  IV[SEM=?v]    
+      VP[SEM = <?v>]    ->  IV[SEM=?v]    
 
       P[SEM = <?p(?np)>]    ->  P[SEM=?p]       NP[SEM=?np]
       P[SEM = <?dt(?np)>]   ->  DT[SEM=?dt]     NP[SEM=?np]
@@ -62,8 +62,8 @@ def semantics_interface():
       WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
 
     ############################ 
-      DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'a'
-      DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'the'
+      DT[SEM=<\P Q.exists x.(P(x) & Q(x))>] -> 'a'
+      DT[SEM=<\P Q.exists x.(P(x) & Q(x))>] -> 'the'
 
       Adj[SEM=<\P x.((P)(x) & tall(x))>] -> 'tall'   
       Adj[SEM=<\P x.((P)(x) & strong(x))>] -> 'strong' 
@@ -107,16 +107,16 @@ def semantics_interface():
       IV[SEM=<\x.party>] -> 'party'
       IV[SEM=<\x.panic>] -> 'panic'
 
-      TV[SEM=<\X x.X(\y.grab(x,y))>] -> 'grab'
-      TV[SEM=<\X x.X(\y.impower(x,y))>] -> 'impower'
-      TV[SEM=<\X x.X(\y.hold(x,y))>] -> 'hold'
-      TV[SEM=<\X x.X(\y.push(x,y))>] -> 'push'
-      TV[SEM=<\X x.X(\y.build(x,y))>] -> 'build'
-      TV[SEM=<\X x.X(\y.mold(x,y))>] -> 'mold'
-      TV[SEM=<\X x.X(\y.hug(x,y))>] -> 'hug'
-      TV[SEM=<\X x.X(\y.love(x,y))>] -> 'love'
-      TV[SEM=<\X x.X(\y.juice(x,y))>] ->'juice'
-      TV[SEM=<\X x.X(\y.obliterate(x,y))>] -> 'obliterate'
+      TV[SEM=<\P x.P(\y.grab(x,y))>] -> 'grab'
+      TV[SEM=<\P x.P(\y.impower(x,y))>] -> 'impower'
+      TV[SEM=<\P x.P(\y.hold(x,y))>] -> 'hold'
+      TV[SEM=<\P x.P(\y.push(x,y))>] -> 'push'
+      TV[SEM=<\P x.P(\y.build(x,y))>] -> 'build'
+      TV[SEM=<\P x.P(\y.mold(x,y))>] -> 'mold'
+      TV[SEM=<\P x.P(\y.hug(x,y))>] -> 'hug'
+      TV[SEM=<\P x.P(\y.love(x,y))>] -> 'love'
+      TV[SEM=<\P x.P(\y.juice(x,y))>] ->'juice'
+      TV[SEM=<\P x.P(\y.obliterate(x,y))>] -> 'obliterate'
 
       N[SEM=<\x.man(x)>]-> 'man' 
       N[SEM=<\x.man(x)>] ->'boy' 
@@ -165,54 +165,55 @@ def create_model():
         bob => b
         sarah => s
 
-        man       =>{m1}
-        boy       =>{b1}
-        cat       =>{ca1}
-        dog       =>{d1}
-        time      =>{t1}
-        house     =>{h1}
-        company   =>{co1}
-        cow       =>{cw1}
-        program   =>{p1}
-        study     =>{s1}
-        owner     =>{o1}
-        door      =>{do1}
-        check     =>{ch1}
+     #   man       =>{m1}
+     #   boy       =>{b1}
+     #   cat       =>{ca1}
+        pet       =>{p1}
+     #   dog       =>{d1}
+     #   time      =>{t1}
+     #   house     =>{h1}
+     #   company   =>{co1}
+     #   cow       =>{cw1}
+     #   program   =>{p1}
+     #   study     =>{s1}
+     #   owner     =>{o1}
+     #   door      =>{do1}
+     #   check     =>{ch1}
         corner    =>{c1}
-        job       =>{j1}
-        dealership=>{de1} 
-        office    =>{o1}
-        customer  =>{cu1}
-        sailor    =>{sa1}
-        member    =>{me1}
-        employee  =>{e1}
+     #   job       =>{j1}
+     #   dealership=>{de1} 
+     #   office    =>{o1}
+     #   customer  =>{cu1}
+     #   sailor    =>{sa1}
+     #   member    =>{me1}
+     #   employee  =>{e1}
 
 
         grab    =>     {(d,c1)}
-        got =>         {(g,j1)}
-        impower    =>  {(ji,jo)}
-        hold    =>     {(d,c1)}
-        push    =>     {(m1,b)}
-        build    =>    {(je,h1)}
-        mold    =>     {(ji,jco1)}
-        hug    =>      {(s,m1)}
-        love    =>     {(ji,s)}
-        milk    =>     {(b1,cw1)}
-        obliterate   =>{(e1,cu1)}
+     #   got =>         {(g,j1)}
+     #   impower    =>  {(ji,jo)}
+     #   hold    =>     {(d,c1)}
+     #   push    =>     {(m1,b)}
+     #   build    =>    {(je,h1)}
+     #   mold    =>     {(ji,jco1)}
+     #   hug    =>      {(s,m1)}
+     #   love    =>     {(ji,s)}
+     #   milk    =>     {(b1,cw1)}
+     #   obliterate   =>{(e1,cu1)}
 
-        funny => {ji}
-        study   => {jo}
-        tall    => {d}
-        strong  => {g}
-        powerful=> {m1} 
-        short   => {s}
-        huge    => {j1}
-        smart   => {d1}
-        nice    => {me1}
-        mean    => {je}
-        skinny  => {sa1}
-        big     => {cu1}
-        large   => {}
+     #   funny => {ji}
+     #   study   => {jo}
+     #   tall    => {d}
+     #   strong  => {g}
+     #   powerful=> {m1} 
+     #   short   => {s}
+     #   huge    => {j1}
+     #   smart   => {d1}
+     #   nice    => {me1}
+     #   mean    => {je}
+     #   skinny  => {sa1}
+     #   big     => {cu1}
+     #   large   => {}
 
 
     """
@@ -232,10 +233,9 @@ def eval_sen(sen):
   #  print(parses)
     
     results = nltk.evaluate_sents([" ".join(tokens)], grammer, m, init)[0]
+#    print(results)
     for (syntree, semrep, value) in results:
-        if semrep:
-            print("I know that")
-        #print(value) 
+        print(semrep,semrep,value) 
   
-eval_sen("george grabbed the cow")
+eval_sen("dave grabbed the dog")
 
