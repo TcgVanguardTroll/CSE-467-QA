@@ -23,7 +23,7 @@ def tokenize(words):
   lemma =  nltk.stem.WordNetLemmatizer()
   return [
       (lemma.lemmatize(token,type_map[type_value[0]])) if type_value[0] in type_map
-      else (lemma.lemmatize(token),type_value)
+      else (lemma.lemmatize(token))
       for token,type_value in tagged
     ]
 
@@ -35,36 +35,41 @@ def semantics_interface():
     # Grammar rules
       
       # Declarative (A Tall Skinny man coughed)
+      S[SEM = <?s>] -> WP S[SEM=?s]
       S[SEM =  <?subj(?vp)>]  ->  NP[SEM=?subj] VP[SEM=?vp]
-      
-#      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
+
+    S[SEM =  <?subj(vp)>]  ->  AUX NP[SEM=?subj]  TV[SEM=?vp]
+
+      S[SEM = <?subj(?vp)>]/NP -> WP AUX NP[SEM=?subj] VP[SEM=?vp]/NP
+
+      S[SEM =  <?subj(?v)>]  ->  NP[SEM=?subj]   
+      S[SEM =  <?subj>]  ->  WP NP[SEM=?subj]
+      S[SEM = <?vp>]       -> WP  VP[SEM=?vp] 
+      S[SEM = <?vp>]   -> WP S[SEM=?s]
 #      
 #      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
-
       NP[SEM = <?det(?n)>]   ->  DT[SEM=?det] N[SEM=?n]
-      NP[SEM = <?n(?p)>]     ->  N[SEM=?n]     P[SEM = ?p]
       NP[SEM = <?pn>]        ->  PN[SEM=?pn]
-      NP[SEM = <?np(?p)>]    ->  NP[SEM=?np]   P[SEM=?p]            
+      NP[SEM = <?np>]    ->  NP[SEM=?np]   PP[SEM=?p]            
       NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]    WP[SEM=?w]
-      NP[SEM = <?adj(?np)>]  ->  ADJ[SEM=?adj] NP[SEM=?np]
+      NP[SEM = <?adj(?np)>]  ->  Adj[SEM=?adj] NP[SEM=?np]
       NP[SEM = <?p(?np)>]    ->  P[SEM=?p]     NP[SEM=?np]
-      
-      VP[SEM = <?v(?vp)>]    ->  IV[SEM=?v]    VP[SEM =?vp]
-      VP[SEM = <?v(?p)>]     ->  TV[SEM=?v]     P[SEM=?p]
-      VP[SEM = <?v(?np)>]    ->  TV[SEM=?v]     NP[SEM=?np]
-      VP[SEM = <?p(?np)>]    ->  P[SEM=?p]      NP[SEM=?np]
-      VP[SEM = <?v>]    ->  IV[SEM=?v]    
 
-      P[SEM = <?p(?np)>]    ->  P[SEM=?p]       NP[SEM=?np]
-      P[SEM = <?dt(?np)>]   ->  DT[SEM=?dt]     NP[SEM=?np]
+      VP[SEM = <?v(?vp)>]    ->  IV[SEM=?v]
+      VP[SEM = <?v(?vp)>]    ->  IV[SEM=?v]    Adj[SEM =?vp]
+      VP[SEM = <?v(?vp)>]    ->  IV[SEM=?v]    VP[SEM =?vp]
+      VP[SEM = <?v(?p)>]     ->  TV[SEM=?v]     PP[SEM=?p]
+      VP[SEM = <?v(?np)>]    ->  TV[SEM=?v]     NP[SEM=?np]
+      VP[SEM = <?v>]/NP    ->  TV[SEM=?v]/NP
+       
+
+      PP[SEM = <?p(?np)>]    ->  P[SEM=?p]  NP[SEM=?np]    
 
       WP[SEM = <?w>]        ->  W[SEM =?w]
       WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
-
     ############################ 
       DT[SEM=<\P Q.exists x.(P(x) & Q(x))>] -> 'a'
       DT[SEM=<\P Q.exists x.(P(x) & Q(x))>] -> 'the'
-
       Adj[SEM=<\P x.((P)(x) & tall(x))>] -> 'tall'   
       Adj[SEM=<\P x.((P)(x) & strong(x))>] -> 'strong' 
       Adj[SEM=<\P x.((P)(x) & strong(x))>] -> 'powerful' 
@@ -90,22 +95,24 @@ def semantics_interface():
       P[PFORM=like ,SEM=<\P.P>] ->'like'
       P[PFORM=since,SEM=<\P.P>] ->'since'
                  
-
       C -> 'that' 
+      WP -> 'who' 
+      WP -> 'what'
 
-      WP -> 'who' 'what' 
-      IV[SEM=<\x.is>] -> 'be'
-      IV[SEM=<\x.is>] -> 'is'
-      IV[SEM=<\x.act>] -> 'act' 
-      IV[SEM=<\x.adapt>] -> 'adapt' 
-      IV[SEM=<\x.crawl>] -> 'crawl' 
-      IV[SEM=<\x.danse>] -> 'danse' 
-      IV[SEM=<\x.erupt>] -> 'erupt' 
-      IV[SEM=<\x.escape>] ->'escape' 
-      IV[SEM=<\x.leave>] -> 'leave'
-      IV[SEM=<\x.start>] -> 'start' 
-      IV[SEM=<\x.party>] -> 'party'
-      IV[SEM=<\x.panic>] -> 'panic'
+      AUX -> 'do' 
+
+      IV[SEM=<\x.is(x)>] -> 'be'
+      IV[SEM=<\x.is(x)>] -> 'is'
+      IV[SEM=<\x.act(x)>] -> 'act' 
+      IV[SEM=<\x.adapt(x)>] -> 'adapt' 
+      IV[SEM=<\x.crawl(x)>] -> 'crawl' 
+      IV[SEM=<\x.danse(x)>] -> 'danse' 
+      IV[SEM=<\x.erupt(x)>] -> 'erupt' 
+      IV[SEM=<\x.escape(x)>] ->'escape' 
+      IV[SEM=<\x.leave(x)>] -> 'leave'
+      IV[SEM=<\x.start(x)>] -> 'start' 
+      IV[SEM=<\x.party(x)>] -> 'party'
+      IV[SEM=<\x.panic(x)>] -> 'panic'
 
       TV[SEM=<\P x.P(\y.grab(x,y))>] -> 'grab'
       TV[SEM=<\P x.P(\y.impower(x,y))>] -> 'impower'
@@ -117,6 +124,8 @@ def semantics_interface():
       TV[SEM=<\P x.P(\y.love(x,y))>] -> 'love'
       TV[SEM=<\P x.P(\y.juice(x,y))>] ->'juice'
       TV[SEM=<\P x.P(\y.obliterate(x,y))>] -> 'obliterate'
+      TV[SEM=<\P x.P(\y.like(x,y))>] ->'like'
+      TV[SEM=<?v(\P.P(w))>]/NP -> TV[SEM=?v]
 
       N[SEM=<\x.man(x)>]-> 'man' 
       N[SEM=<\x.man(x)>] ->'boy' 
@@ -139,21 +148,20 @@ def semantics_interface():
       N[SEM=<\x.sailor(x)>] ->'sailor'
       N[SEM=<\x.man(x)>] ->'member' 
       N[SEM=<\x.man(x)>] ->'employee'
-
-      NP[SEM=<\P.P(jimmy)>] -> 'jimmy'
-      NP[SEM=<\P.P(jimmy)>] -> 'james' 
-      NP[SEM=<\P.P(jimmy)>] -> 'jim'
-      NP[SEM=<\P.P(jordan)>] ->'jordan'
-      NP[SEM=<\P.P(jimmy)>] -> 'grant'
-      NP[SEM=<\P.P(sarah)>] -> 'sarah' 
-      NP[SEM=<\P.P(bob)>] -> 'bob'
-      NP[SEM=<\P.P(dave)>] -> 'dave'  
-      NP[SEM=<\P.P(jeff)>] -> 'jeff'
-      NP[SEM=<\P.P(george)>] -> 'george' 
+      PN[SEM=<\P.P(jimmy)>] -> 'jimmy'
+      PN[SEM=<\P.P(jimmy)>] -> 'james' 
+      PN[SEM=<\P.P(jimmy)>] -> 'jim'
+      PN[SEM=<\P.P(jordan)>] ->'jordan'
+      PN[SEM=<\P.P(jimmy)>] -> 'grant'
+      PN[SEM=<\P.P(sarah)>] -> 'sarah' 
+      PN[SEM=<\P.P(bob)>] -> 'bob'
+      PN[SEM=<\P.P(dave)>] -> 'dave'  
+      PN[SEM=<\P.P(jeff)>] -> 'jeff'
+      PN[SEM=<\P.P(george)>] -> 'george' 
       VPB ->'sneeze'
-      """
+      """    
     g= nltk.grammar.FeatureGrammar.fromstring(grammer_str) 
-    return  (nltk.parse.FeatureChartParser(g,trace=0),g)    
+    return  (nltk.parse.FeatureChartParser(g,trace=1),g)    
 
 def create_model():
     v = """
@@ -165,77 +173,113 @@ def create_model():
         bob => b
         sarah => s
 
-     #   man       =>{m1}
-     #   boy       =>{b1}
-     #   cat       =>{ca1}
-        pet       =>{p1}
-     #   dog       =>{d1}
-     #   time      =>{t1}
-     #   house     =>{h1}
-     #   company   =>{co1}
-     #   cow       =>{cw1}
-     #   program   =>{p1}
-     #   study     =>{s1}
-     #   owner     =>{o1}
-     #   door      =>{do1}
-     #   check     =>{ch1}
-        corner    =>{c1}
-     #   job       =>{j1}
-     #   dealership=>{de1} 
-     #   office    =>{o1}
-     #   customer  =>{cu1}
-     #   sailor    =>{sa1}
-     #   member    =>{me1}
-     #   employee  =>{e1}
+        man       =>{m1,m2}
+        boy       =>{b1}
+        cat       =>{ca1}
+       pet       =>{p1}
+        dog       =>{d1}
+        time      =>{t1}
+        house     =>{h1}
+        company   =>{co1}
+        cow       =>{cw1}
+        program   =>{po1}
+        study     =>{s1}
+        owner     =>{o1}
+        door      =>{do1}
+        check     =>{ch1}
+       corner    =>{c1}
+        job       =>{j1}
+        dealership=>{de1} 
+        office    =>{o1,o2}
+        customer  =>{cu1}
+        sailor    =>{sa1}
+        member    =>{me1}
+        employee  =>{e1}
+     
+    
+      # by => {(de1,o1)}
+      # with => {(s,m)}
+      # about => {(s1,p1)}
+      # in    => {}
+      # as    => {}
+      # to    => {}
+      # at    => {(cw1,h1)}
+      # for   => {(po1,co1)}
+      # near  => {(d1,m1)}
+      # above => {(d1,m2)}
+      # like  => {(ji,s)}
+      # since => {}
+
+
+       leave => {d,ji,e1}
+       be       =>{}
+       is       =>{}
+       act      =>{}
+       adapt    =>{}
+       crawl    =>{}
+       danse    =>{}
+       erupt    =>{}
+       escape   =>{m1}
+       leave    =>{}
+       start    =>{}
+       party    =>{}
+       panic    =>{}
 
 
         grab    =>     {(d,c1)}
-     #   got =>         {(g,j1)}
-     #   impower    =>  {(ji,jo)}
-     #   hold    =>     {(d,c1)}
-     #   push    =>     {(m1,b)}
-     #   build    =>    {(je,h1)}
-     #   mold    =>     {(ji,jco1)}
-     #   hug    =>      {(s,m1)}
-     #   love    =>     {(ji,s)}
-     #   milk    =>     {(b1,cw1)}
-     #   obliterate   =>{(e1,cu1)}
+        got =>         {(g,j1)}
+        impower    =>  {(ji,jo)}
+        hold    =>     {(d,c1)}
+        push    =>     {(m1,b)}
+        build    =>    {(je,h1)}
+        mold    =>     {(ji,jco1)}
+        hug    =>      {(s,m1)}
+        love    =>     {(ji,s)}
+        milk    =>     {(b1,cw1)}
+        obliterate   =>{(e1,cu1)}
+        
 
-     #   funny => {ji}
-     #   study   => {jo}
-     #   tall    => {d}
-     #   strong  => {g}
-     #   powerful=> {m1} 
-     #   short   => {s}
-     #   huge    => {j1}
-     #   smart   => {d1}
-     #   nice    => {me1}
-     #   mean    => {je}
-     #   skinny  => {sa1}
-     #   big     => {cu1}
-     #   large   => {}
+        funny => {ji}
+        study   => {jo}
+        tall    => {d}
+        strong  => {g}
+        powerful=> {m1} 
+        short   => {s}
+        huge    => {j1}
+        smart   => {d1}
+        nice    => {me1}
+        mean    => {je}
+        skinny  => {sa1}
+        big     => {cu1}
+        large   => {}
 
 
     """
     value = nltk.Valuation.fromstring(v)    
     init = nltk.Assignment(value.domain)
     m = nltk.Model(value.domain,value)
-    return (m,init) 
+    return (m,init,value) 
     
 
 def eval_sen(sen):
 
     tokens = tokenize(sen)
     print(tokens)
-    (m,init) = create_model() 
+    (m,init,value) = create_model() 
     (parser,grammer) = semantics_interface() 
     parses = [tree.label()['SEM'] for tree in parser.parse(tokens)] 
-  #  print(parses)
-    
+
     results = nltk.evaluate_sents([" ".join(tokens)], grammer, m, init)[0]
-#    print(results)
+
+
+    formula = parses[0]
+    
+    print(formula)
+    freevar = list(formula.free())
+    print(freevar)
+
     for (syntree, semrep, value) in results:
-        print(semrep,semrep,value) 
+        print(semrep,value) 
   
-eval_sen("dave grabbed the dog")
+eval_sen("what did a man push")
 
