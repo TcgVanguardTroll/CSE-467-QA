@@ -230,12 +230,13 @@ def eval_sen(sen):
     (m,init) = create_model() 
     (parser,grammer) = semantics_interface() 
     parses = [tree.label()['SEM'] for tree in parser.parse(tokens)] 
-  #  print(parses)
-    
+        
     results = nltk.evaluate_sents([" ".join(tokens)], grammer, m, init)[0]
-#    print(results)
     for (syntree, semrep, value) in results:
-        print(semrep,semrep,value) 
+        if value is True:
+          print("I know!")
+        elif value is False:
+          print("I don't think so")
   
 eval_sen("dave grabbed the dog")
 
