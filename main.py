@@ -1,19 +1,17 @@
-import nltk
-import re
 import os
+import re
+
+import nltk
+
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
-from nltk import grammar, parse
-from nltk.tokenize import wordpunct_tokenize
-from nltk.corpus import wordnet
-from nltk.parse import stanford
-from functools import * 
-# !wget 'https://nlp.stanford.edu/software/stanford-tagger-4.2.0.zip'
-# !unzip 'stanford-tagger-4.2.0.zip'
+from functools import *
 
-# jar = '/content/stanford-postagger-4.2.0'
-# model = '/content/stanford-postagger-full-2020-11-17/models/english-left3words-distsim.tagger'
+from nltk import grammar, parse
+from nltk.corpus import wordnet
+from nltk.tokenize import wordpunct_tokenize
+
 def tokenize(words):
   words = words.lower()
   raw_tokens =  list(filter(lambda x: re.match(r"[A-Za-z]",x),nltk.word_tokenize(words)))
@@ -27,19 +25,32 @@ def tokenize(words):
       for token,type_value in tagged
     ]
 
+  def determine_type(sen):
+    words = nltk.tokenize.word_tokenize(sen)
+    wordTagList = nltk.pos_tag(words)
+    tagList = [tag for (word,tag) in wordTagList]
+    if tagList[0] is "WP":
+          return "Who"
+    elif tagList[0] is "AUX":
+          return "YesNo"
+    else:
+           return "Declaration"
+
 
 def semantics_interface():
 # take tokens and build a  Semantics interface
     grammer_str = r"""
      % start S
-    # Grammar rules
+      # Grammar rules
       
       # Declarative (A Tall Skinny man coughed)
       S[SEM =  <?subj(?vp)>]  ->  NP[SEM=?subj] VP[SEM=?vp]
       
-#      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
-#      
-#      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
+      S[SEM  = <?w(?vp)>]  ->  WP[SEM=?w] VP[SEM=?vp]
+      
+      S[SEM  = <?vp(?np)>]  ->  VP[SEM=?vp] NP[SEM=?np]
+
+      S[SEM =  <?subj(?vp)>] -> AUX NP[SEM=?subj] VP[SEM=?vp]
 
       NP[SEM = <?det(?n)>]   ->  DT[SEM=?det] N[SEM=?n]
       NP[SEM = <?n(?p)>]     ->  N[SEM=?n]     P[SEM = ?p]
@@ -90,10 +101,11 @@ def semantics_interface():
       P[PFORM=like ,SEM=<\P.P>] ->'like'
       P[PFORM=since,SEM=<\P.P>] ->'since'
                  
-
+      AUX -> 'did' | 'was'
+      
       C -> 'that' 
 
-      WP -> 'who' 'what' 
+      WP -> 'who' | 'what' 
       IV[SEM=<\x.is>] -> 'be'
       IV[SEM=<\x.is>] -> 'is'
       IV[SEM=<\x.act>] -> 'act' 
@@ -168,7 +180,7 @@ def create_model():
      #   man       =>{m1}
      #   boy       =>{b1}
      #   cat       =>{ca1}
-        pet       =>{p1}
+         pet       =>{p1}
      #   dog       =>{d1}
      #   time      =>{t1}
      #   house     =>{h1}
@@ -179,7 +191,7 @@ def create_model():
      #   owner     =>{o1}
      #   door      =>{do1}
      #   check     =>{ch1}
-        corner    =>{c1}
+         corner    =>{c1}
      #   job       =>{j1}
      #   dealership=>{de1} 
      #   office    =>{o1}
@@ -230,7 +242,7 @@ def eval_sen(sen):
     (m,init) = create_model() 
     (parser,grammer) = semantics_interface() 
     parses = [tree.label()['SEM'] for tree in parser.parse(tokens)] 
-        
+
     results = nltk.evaluate_sents([" ".join(tokens)], grammer, m, init)[0]
     for (syntree, semrep, value) in results:
         if value is True:
