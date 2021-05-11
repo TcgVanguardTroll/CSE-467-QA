@@ -25,16 +25,16 @@ def tokenize(words):
       for token,type_value in tagged
     ]
 
-  def determine_type(sen):
-    words = nltk.tokenize.word_tokenize(sen)
-    wordTagList = nltk.pos_tag(words)
-    tagList = [tag for (word,tag) in wordTagList]
-    if tagList[0] is "WP":
-          return "Who"
-    elif tagList[0] is "AUX":
-          return "YesNo"
-    else:
-           return "Declaration"
+def determine_type(sen):
+  words = nltk.tokenize.word_tokenize(sen)
+  wordTagList = nltk.pos_tag(words)
+  tagList = [tag for (word,tag) in wordTagList]
+  if tagList[0] is "WP":
+        return "Who"
+  elif tagList[0] is "AUX":
+        return "YesNo"
+  else:
+          return "Declaration"
 
 
 def semantics_interface():
@@ -245,10 +245,16 @@ def eval_sen(sen):
 
     results = nltk.evaluate_sents([" ".join(tokens)], grammer, m, init)[0]
     for (syntree, semrep, value) in results:
-        if value is True:
-          print("I know!")
-        elif value is False:
-          print("I don't think so")
+        if determine_type(sen) is "Declaration":
+          if value is True:
+            print("I know!")
+          else:
+            print("I don't think so")
+        elif determine_type(sen) is "YesNo":
+            if value is True:
+              print("Yes!")
+            else:
+              print("No!")
   
 eval_sen("dave grabbed the dog")
 
