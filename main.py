@@ -255,6 +255,11 @@ def eval_sen(sen):
               print("Yes!")
             else:
               print("No!")
+        else:
+          if value is True:
+            print("The answer is")
+          else:
+            print("What are you talking about ?")  
   
 eval_sen("dave grabbed the dog")
 
