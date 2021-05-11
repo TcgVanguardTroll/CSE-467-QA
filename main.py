@@ -55,12 +55,16 @@ def semantics_interface():
       NP[SEM = <?det(?n)>]   ->  DT[SEM=?det] N[SEM=?n]
       NP[SEM = <?n(?p)>]     ->  N[SEM=?n]     P[SEM = ?p]
       NP[SEM = <?pn>]        ->  PN[SEM=?pn]
+      NP[SEM = <?n>]         ->  N[SEM=?n]
+      NP[SEM = <?dt(?n)>]    ->  DT[SEM=?dt]  N[SEM=?n]
+      NP[SEM = <?n(?p)>]     ->  N[SEM=?n]    P[SEM = ?p]
       NP[SEM = <?np(?p)>]    ->  NP[SEM=?np]   P[SEM=?p]            
-      NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]    WP[SEM=?w]
+      NP[SEM = <?np(?w)>]   ->   NP[SEM=?dt]   WP[SEM=?w]
       NP[SEM = <?adj(?np)>]  ->  ADJ[SEM=?adj] NP[SEM=?np]
       NP[SEM = <?p(?np)>]    ->  P[SEM=?p]     NP[SEM=?np]
       
-      VP[SEM = <?v(?vp)>]    ->  IV[SEM=?v]    VP[SEM =?vp]
+      VP[SEM = <?v(?vp)>]    ->  ITV[SEM=?v]    VP[SEM =?vp]
+      VP[SEM = <?wp(?vp)>]   ->  WP[SEM =?wp]   VP[SEM=?vp]
       VP[SEM = <?v(?p)>]     ->  TV[SEM=?v]     P[SEM=?p]
       VP[SEM = <?v(?np)>]    ->  TV[SEM=?v]     NP[SEM=?np]
       VP[SEM = <?p(?np)>]    ->  P[SEM=?p]      NP[SEM=?np]
@@ -73,8 +77,11 @@ def semantics_interface():
       WP[SEM = <?w(?s)>]    ->  W[SEM =?w]     S[SEM = ?s] 
 
     ############################ 
-      DT[SEM=<\P Q.exists x.(P(x) & Q(x))>] -> 'a'
-      DT[SEM=<\P Q.exists x.(P(x) & Q(x))>] -> 'the'
+
+    # Lexicon rules
+
+      DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'a'
+      DT[SEM=<\P Q.exists x.((P(x) -> Q(x)))>] -> 'the'
 
       Adj[SEM=<\P x.((P)(x) & tall(x))>] -> 'tall'   
       Adj[SEM=<\P x.((P)(x) & strong(x))>] -> 'strong' 
@@ -104,52 +111,49 @@ def semantics_interface():
       AUX -> 'did' | 'was'
       
       C -> 'that' 
-
       WP -> 'who' | 'what' 
-      IV[SEM=<\x.is>] -> 'be'
-      IV[SEM=<\x.is>] -> 'is'
-      IV[SEM=<\x.act>] -> 'act' 
-      IV[SEM=<\x.adapt>] -> 'adapt' 
-      IV[SEM=<\x.crawl>] -> 'crawl' 
-      IV[SEM=<\x.danse>] -> 'danse' 
-      IV[SEM=<\x.erupt>] -> 'erupt' 
-      IV[SEM=<\x.escape>] ->'escape' 
-      IV[SEM=<\x.leave>] -> 'leave'
-      IV[SEM=<\x.start>] -> 'start' 
-      IV[SEM=<\x.party>] -> 'party'
-      IV[SEM=<\x.panic>] -> 'panic'
-
-      TV[SEM=<\P x.P(\y.grab(x,y))>] -> 'grab'
-      TV[SEM=<\P x.P(\y.impower(x,y))>] -> 'impower'
-      TV[SEM=<\P x.P(\y.hold(x,y))>] -> 'hold'
-      TV[SEM=<\P x.P(\y.push(x,y))>] -> 'push'
-      TV[SEM=<\P x.P(\y.build(x,y))>] -> 'build'
-      TV[SEM=<\P x.P(\y.mold(x,y))>] -> 'mold'
-      TV[SEM=<\P x.P(\y.hug(x,y))>] -> 'hug'
-      TV[SEM=<\P x.P(\y.love(x,y))>] -> 'love'
-      TV[SEM=<\P x.P(\y.juice(x,y))>] ->'juice'
-      TV[SEM=<\P x.P(\y.obliterate(x,y))>] -> 'obliterate'
+      IV[SEM=<\x.is] -> 'is' 
+      IV[SEM=<\x.act] -> 'act' 
+      IV[SEM=<\x.adapt] -> 'adapt' 
+      IV[SEM=<\x.crawl] -> 'crawl' 
+      IV[SEM=<\x.dance] -> 'dance' 
+      IV[SEM=<\x.erupt] -> 'erupt' 
+      IV[SEM=<\x.escape] -> 'escape' 
+      IV[SEM=<\x.leave] -> 'leave' 
+      IV[SEM=<\x.start] -> 'start' 
+      IV[SEM=<\x.party] -> 'party' 
+      IV[SEM=<\x.panic] -> 'panic'
+      TV[SEM=<\x x.x(\y.grab(x,y))] -> 'grab' 
+      TV[SEM=<\x x.x(\y.impower(x,y))] -> 'impower' 
+      TV[SEM=<\x x.x(\y.hold(x,y))] -> 'hold' 
+      TV[SEM=<\x x.x(\y.push(x,y))] -> 'push' 
+      TV[SEM=<\x x.x(\y.build(x,y))] -> 'build' 
+      TV[SEM=<\x x.x(\y.mold(x,y))] -> 'mold' 
+      TV[SEM=<\x x.x(\y.hug(x,y))] -> 'hug' 
+      TV[SEM=<\x x.x(\y.love(x,y))] -> 'love' 
+      TV[SEM=<\x x.x(\y.juice(x,y))] -> 'juice' 
+      TV[SEM=<\x x.x(\y.obliterate(x,y))] -> 'obliterate' 
 
       N[SEM=<\x.man(x)>]-> 'man' 
-      N[SEM=<\x.man(x)>] ->'boy' 
-      N[SEM=<\x.pet(x)>] ->'cat' 
-      N[SEM=<\x.pet(x)>] ->'dog' 
-      N[SEM=<\x.time(x)>] ->'time'
-      N[SEM=<\x.home(x)>] ->'house'
-      N[SEM=<\x.company(x)>] ->'company'
-      N[SEM=<\x.cow(x)>] ->    'cow'
-      N[SEM=<\x.program(x)>] ->'program'
-      N[SEM=<\x.study(x)>] ->'study'
-      N[SEM=<\x.owner(x)>] ->'owner'
-      N[SEM=<\x.man(x)>] -> 'door'
-      N[SEM=<\x.check(x)>] ->'check'
-      N[SEM=<\x.corner(x)>] ->'corner'
-      N[SEM=<\x.job(x)>] -> 'job'
-      N[SEM=<\x.dealership(x)>] ->'dealership'
-      N[SEM=<\x.office(x)>] ->'office'
-      N[SEM=<\x.customer(x)>] ->'customer'
-      N[SEM=<\x.sailor(x)>] ->'sailor'
-      N[SEM=<\x.man(x)>] ->'member' 
+      N[SEM=<\x.man(x)>] -> 'boy' 
+      N[SEM=<\x.pet(x)>] -> 'cat' 
+      N[SEM=<\x.pet(x)>] -> 'dog' 
+      N[SEM=<\x.time(x)>] -> 'time' 
+      N[SEM=<\x.home(x)>] -> 'house' 
+      N[SEM=<\x.company(x)>] -> 'company' 
+      N[SEM=<\x.cow(x)>] -> 'cow' 
+      N[SEM=<\x.program(x)>] -> 'program' 
+      N[SEM=<\x.study(x)>] -> 'study' 
+      N[SEM=<\x.owner(x)>] -> 'owner' 
+      N[SEM=<\x.man(x)>] -> 'door' 
+      N[SEM=<\x.check(x)>] -> 'check' 
+      N[SEM=<\x.corner(x)>] -> 'corner' 
+      N[SEM=<\x.job(x)>] -> 'job' 
+      N[SEM=<\x.dealership(x)>] -> 'dealership' 
+      N[SEM=<\x.office(x)>] -> 'office' 
+      N[SEM=<\x.customer(x)>] -> 'customer' 
+      N[SEM=<\x.sailor(x)>] -> 'sailor' 
+      N[SEM=<\x.man(x)>] -> 'member' 
       N[SEM=<\x.man(x)>] ->'employee'
 
       NP[SEM=<\P.P(jimmy)>] -> 'jimmy'
